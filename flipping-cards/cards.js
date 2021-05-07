@@ -8,6 +8,7 @@ const backCard = document.querySelectorAll('.theback');
 
 const imageList = [...arr, ...arr].sort(() => Math.round(Math.random()) ? 1 : -1);
 
+const congrats = document.querySelector('.congrats');
 
 
 while(imageList.length){
@@ -23,21 +24,29 @@ backCard.forEach(back => {
 
 let match = [];
 
+let win = [];
+
 cards.forEach(card => {
-  card.addEventListener('click',function() {
+  card.addEventListener('click',function(e) {
     card.classList.add('rotate');
-    match.push(card.classList[1]);
+    match.push(e.currentTarget.classList[1]);
+    card.style.pointerEvents = 'none';
     if(match[0] !== match[1] && match.length > 1) {
       for(let i of match) {
         document.querySelectorAll(`.${i}`).forEach(notMatch => {
           setTimeout(() => {
             notMatch.classList.remove('rotate');
+            notMatch.style.pointerEvents = '';
           },500)
         })
       }
       match = [];
     } else if(match[0] == match[1] && match.length > 1) {
+      win.push(match[0],match[1]);
       match = [];
+      if(win.length == cards.length) {
+        congrats.textContent = 'you have won the game';
+      }
     }
   })
 })
